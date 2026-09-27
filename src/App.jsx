@@ -6,6 +6,7 @@ import Safety from './pages/Safety'
 import Footprint from './pages/Footprint'
 import Security from './pages/Security'
 import Quiz from './pages/Quiz'
+import Schedule from './pages/Schedule'
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
           <Route path="/footprint" element={<Footprint />} />
           <Route path="/security" element={<Security />} />
           <Route path="/quiz" element={<Quiz />} />
+          <Route path="/schedule" element={<Schedule />} />
         </Routes>
       </main>
     </div>
