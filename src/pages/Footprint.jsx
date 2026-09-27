@@ -1,19 +1,17 @@
 import MetadataReveal from '../components/MetadataReveal'
+import PageHeader from '../components/PageHeader'
 
 export default function Footprint() {
   return (
     <div className="max-w-5xl mx-auto px-6 py-16">
-      <p className="font-data text-signal-amber text-xs uppercase tracking-widest mb-4">
-        03 — Your Digital Footprint
-      </p>
-      <h1 className="font-serif text-3xl md:text-4xl font-semibold max-w-2xl leading-tight">
-        The photo is the message. The metadata is what you sent by accident.
-      </h1>
-      <p className="text-paper-dim text-lg mt-5 max-w-2xl leading-relaxed">
-        Every photo your phone takes carries a second, invisible layer
-        alongside the image — camera model, timestamp, and often the exact
-        GPS coordinates of where it was shot.
-      </p>
+      <PageHeader
+        number="03"
+        label="Your Digital Footprint"
+        icon="footprint"
+        title="The photo is the message. The metadata is what you sent by accident."
+        intro="Every photo your phone takes carries a second, invisible layer alongside the image — camera model, timestamp, and often the exact GPS coordinates of where it was shot."
+        narrow
+      />
 
       <section className="mt-14">
         <h2 className="font-serif text-xl font-semibold mb-4">
