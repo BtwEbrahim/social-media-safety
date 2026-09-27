@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import PageHeader from '../components/PageHeader'
 
 const passwordCheck = (pw) => {
   if (!pw) return null
@@ -64,17 +65,14 @@ function PasswordStrength() {
 export default function Security() {
   return (
     <div className="max-w-5xl mx-auto px-6 py-16">
-      <p className="font-data text-signal-amber text-xs uppercase tracking-widest mb-4">
-        04 — Account Security
-      </p>
-      <h1 className="font-serif text-3xl md:text-4xl font-semibold max-w-2xl leading-tight">
-        Locked and merely closed aren't the same thing.
-      </h1>
-      <p className="text-paper-dim text-lg mt-5 max-w-2xl leading-relaxed">
-        Most accounts that get compromised weren't broken into — they were
-        walked into, through a reused password or a login step that never
-        actually verified anyone.
-      </p>
+      <PageHeader
+        number="04"
+        label="Account Security"
+        icon="security"
+        title="Locked and merely closed aren't the same thing."
+        intro="Most accounts that get compromised weren't broken into — they were walked into, through a reused password or a login step that never actually verified anyone."
+        narrow
+      />
 
       <section className="mt-14">
         <h2 className="font-serif text-xl font-semibold mb-4">
@@ -91,7 +89,7 @@ export default function Security() {
           <p className="text-sm text-paper-dim leading-relaxed">
             Bitwarden and Proton Pass both use zero-knowledge encryption —
             the company itself can't read your vault, even if their
-          servers were breached. Bitwarden's free tier no longer
+            servers were breached. Bitwarden's free tier no longer
             includes built-in 2FA code generation as of 2026; Proton Pass
             gives up to 3 free. Either is a genuine upgrade over reusing
             passwords across sites.
