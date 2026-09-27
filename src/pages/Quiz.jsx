@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import PageHeader from '../components/PageHeader'
 
 const questions = [
   {
@@ -72,16 +73,13 @@ export default function Quiz() {
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-16">
-      <p className="font-data text-signal-amber text-xs uppercase tracking-widest mb-4">
-        05 — Quiz
-      </p>
-      <h1 className="font-serif text-3xl md:text-4xl font-semibold leading-tight">
-        Did any of it stick?
-      </h1>
-      <p className="text-paper-dim text-lg mt-5 leading-relaxed">
-        Five questions, one from each part of the site. No account, no
-        tracking — same principle as everything above.
-      </p>
+      <PageHeader
+        number="05"
+        label="Quiz"
+        icon="quiz"
+        title="Did any of it stick?"
+        intro="Five questions, one from each part of the site. No account, no tracking — same principle as everything above."
+      />
 
       <div className="mt-12 space-y-8">
         {questions.map((q, qi) => (
