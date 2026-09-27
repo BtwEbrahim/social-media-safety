@@ -16,8 +16,6 @@ alter table public.bookings enable row level security;
 revoke all on table public.bookings from anon, authenticated;
 grant insert on table public.bookings to authenticated;
 
-after insert on public.bookings
-
 create policy "Authenticated users can create their own booking"
 on public.bookings
 for insert
