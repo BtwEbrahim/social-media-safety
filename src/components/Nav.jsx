@@ -1,18 +1,19 @@
 import { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
+import PhosphorIcon from './PhosphorIcon'
 
 const links = [
-  { to: '/', label: 'Home', end: true },
-  { to: '/trackers', label: 'Trackers & Ads' },
-  { to: '/safety', label: 'Social Safety' },
-  { to: '/footprint', label: 'Digital Footprint' },
-  { to: '/security', label: 'Account Security' },
-  { to: '/quiz', label: 'Quiz' },
-  { to: '/schedule', label: 'Schedule' },
+  { to: '/', label: 'Home', icon: 'home', end: true },
+  { to: '/trackers', label: 'Trackers & Ads', icon: 'trackers' },
+  { to: '/safety', label: 'Social Safety', icon: 'safety' },
+  { to: '/footprint', label: 'Digital Footprint', icon: 'footprint' },
+  { to: '/security', label: 'Account Security', icon: 'security' },
+  { to: '/quiz', label: 'Quiz', icon: 'quiz' },
+  { to: '/schedule', label: 'Schedule', icon: 'schedule' },
 ]
 
 const linkClass = ({ isActive }) =>
-  `font-data text-xs px-3 py-2 rounded transition-colors whitespace-nowrap ${
+  `font-data text-xs px-3 py-2 rounded transition-colors whitespace-nowrap flex items-center gap-1.5 ${
     isActive
       ? 'text-signal-teal bg-signal-teal/10'
       : 'text-paper-dim hover:text-paper'
@@ -48,9 +49,7 @@ export default function Nav() {
           aria-label={open ? 'Close navigation' : 'Open navigation'}
           onClick={() => setOpen((value) => !value)}
         >
-          <svg aria-hidden="true" viewBox="0 0 24 24" className="w-5 h-5 fill-none stroke-current stroke-2">
-            {open ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
-          </svg>
+          <PhosphorIcon name="menu" size={22} className="transition-transform" />
         </button>
 
         <nav
@@ -68,6 +67,7 @@ export default function Nav() {
               className={linkClass}
               onClick={() => setOpen(false)}
             >
+              <PhosphorIcon name={link.icon} size={16} />
               {link.label}
             </NavLink>
           ))}
