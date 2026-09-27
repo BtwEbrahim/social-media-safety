@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import PageHeader from '../components/PageHeader'
 import PhosphorIcon from '../components/PhosphorIcon'
+import { createBooking, sendEmailOtp, supabaseConfigured, verifyEmailOtp } from '../lib/supabase'
 
 const slots = ['10:00', '11:30', '14:00', '15:30', '17:00']
 
@@ -32,6 +33,14 @@ function dateKey(date) {
   return date.toISOString().slice(0, 10)
 }
 
+function readableError(error) {
+  const message = error instanceof Error ? error.message : 'Something went wrong.'
+  if (message.includes('duplicate key') || message.includes('bookings_slot_unique')) {
+    return 'That slot was just taken. Choose another time.'
+  }
+  return message
+}
+
 export default function Schedule() {
   const days = useMemo(() => upcomingDays(), [])
   const [name, setName] = useState('')
@@ -40,28 +49,72 @@ export default function Schedule() {
   const [step, setStep] = useState(1)
   const [selectedDate, setSelectedDate] = useState(dateKey(days[0]))
   const [selectedTime, setSelectedTime] = useState('')
+  const [accessToken, setAccessToken] = useState('')
   const [message, setMessage] = useState('')
+  const [busy, setBusy] = useState(false)
 
-  const requestCode = (event) => {
+  const requestCode = async (event) => {
     event.preventDefault()
-    setMessage('OTP delivery is not connected yet. Nothing was submitted.')
-    setStep(2)
+    setBusy(true)
+    setMessage('')
+
+    try {
+      await sendEmailOtp(email.trim())
+      setMessage(`A one-time code was sent to ${email.trim()}.`)
+      setStep(2)
+    } catch (error) {
+      setMessage(readableError(error))
+    } finally {
+      setBusy(false)
+    }
   }
 
-  const verifyCode = (event) => {
+  const verifyCode = async (event) => {
     event.preventDefault()
     if (!/^\d{6}$/.test(code)) {
       setMessage('Enter the six-digit code from your email.')
       return
     }
-    setMessage('Code format accepted. Slot selection is ready; Supabase verification is still pending.')
-    setStep(3)
+
+    setBusy(true)
+    setMessage('')
+
+    try {
+      const data = await verifyEmailOtp(email.trim(), code)
+      if (!data?.access_token) {
+        throw new Error('Supabase did not return a valid session.')
+      }
+      setAccessToken(data.access_token)
+      setMessage('Email verified. Choose an available session time.')
+      setStep(3)
+    } catch (error) {
+      setMessage(readableError(error))
+    } finally {
+      setBusy(false)
+    }
   }
 
-  const bookSlot = (event) => {
+  const bookSlot = async (event) => {
     event.preventDefault()
-    if (!selectedTime) return
-    setMessage('The slot is selected locally. The booking write will be enabled with the Supabase connection.')
+    if (!selectedTime || !accessToken) return
+
+    setBusy(true)
+    setMessage('')
+
+    try {
+      await createBooking({
+        accessToken,
+        name: name.trim(),
+        email: email.trim(),
+        slotDate: selectedDate,
+        slotTime: selectedTime,
+      })
+      setMessage(`Session confirmed for ${formatDay(new Date(`${selectedDate}T12:00:00`))} at ${selectedTime}.`)
+    } catch (error) {
+      setMessage(readableError(error))
+    } finally {
+      setBusy(false)
+    }
   }
 
   return (
@@ -71,7 +124,7 @@ export default function Schedule() {
         label="Safety Session"
         icon="schedule"
         title="Schedule a session without a password."
-        intro="The booking flow is designed around email OTP authentication, so there is no new password to create or store."
+        intro="The booking flow uses email OTP authentication, so there is no new password to create or store."
       />
 
       <div className="flex items-center gap-2 mb-6 font-data text-[11px] uppercase tracking-wider text-paper-dim">
@@ -98,6 +151,8 @@ export default function Schedule() {
                 type="text"
                 autoComplete="name"
                 required
+                minLength={2}
+                maxLength={100}
                 value={name}
                 onChange={(event) => setName(event.target.value)}
                 placeholder="Your name"
@@ -121,9 +176,10 @@ export default function Schedule() {
             </div>
             <button
               type="submit"
-              className="font-data text-xs px-4 py-3 rounded bg-signal-teal text-paper hover:bg-signal-teal-dim transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal-teal"
+              disabled={busy || !supabaseConfigured}
+              className="font-data text-xs px-4 py-3 rounded bg-signal-teal text-paper hover:bg-signal-teal-dim transition-colors disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal-teal"
             >
-              REQUEST OTP
+              {busy ? 'SENDING…' : 'REQUEST OTP'}
             </button>
           </form>
         )}
@@ -157,13 +213,15 @@ export default function Schedule() {
             <div className="flex flex-wrap gap-3">
               <button
                 type="submit"
-                className="font-data text-xs px-4 py-3 rounded bg-signal-teal text-paper hover:bg-signal-teal-dim transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal-teal"
+                disabled={busy}
+                className="font-data text-xs px-4 py-3 rounded bg-signal-teal text-paper hover:bg-signal-teal-dim transition-colors disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal-teal"
               >
-                VERIFY CODE
+                {busy ? 'VERIFYING…' : 'VERIFY CODE'}
               </button>
               <button
                 type="button"
-                className="font-data text-xs px-4 py-3 rounded border border-ink-line text-paper-dim hover:text-paper transition-colors"
+                disabled={busy}
+                className="font-data text-xs px-4 py-3 rounded border border-ink-line text-paper-dim hover:text-paper transition-colors disabled:opacity-40"
                 onClick={() => {
                   setStep(1)
                   setCode('')
@@ -224,10 +282,10 @@ export default function Schedule() {
 
             <button
               type="submit"
-              disabled={!selectedTime}
+              disabled={!selectedTime || busy}
               className="font-data text-xs px-4 py-3 rounded bg-signal-teal text-paper hover:bg-signal-teal-dim transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
             >
-              CONFIRM SESSION
+              {busy ? 'CONFIRMING…' : 'CONFIRM SESSION'}
             </button>
           </form>
         )}
@@ -239,9 +297,11 @@ export default function Schedule() {
         )}
       </div>
 
-      <p className="font-data text-[11px] text-paper-dim/70 mt-4">
-        Demo state only: no name, email, OTP, or booking is sent anywhere until the Supabase connection is enabled.
-      </p>
+      {!supabaseConfigured && (
+        <p className="font-data text-[11px] text-signal-amber mt-4">
+          Supabase is not configured for this build. Add the two Vite variables from .env.example before testing the booking flow.
+        </p>
+      )}
     </div>
   )
 }
