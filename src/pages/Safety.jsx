@@ -1,4 +1,5 @@
 import FakeAccountCheck from '../components/FakeAccountCheck'
+import PageHeader from '../components/PageHeader'
 
 const reportPaths = [
   {
@@ -18,17 +19,14 @@ const reportPaths = [
 export default function Safety() {
   return (
     <div className="max-w-5xl mx-auto px-6 py-16">
-      <p className="font-data text-signal-amber text-xs uppercase tracking-widest mb-4">
-        02 — Social Media Safety
-      </p>
-      <h1 className="font-serif text-3xl md:text-4xl font-semibold max-w-2xl leading-tight">
-        Most scams don't look like scams.
-      </h1>
-      <p className="text-paper-dim text-lg mt-5 max-w-2xl leading-relaxed">
-        They look like a friend request, a modeling offer, a giveaway, or
-        someone who already seems to know you. The tell is rarely in what
-        they say — it's in the shape of the account behind it.
-      </p>
+      <PageHeader
+        number="02"
+        label="Social Media Safety"
+        icon="safety"
+        title="Most scams don't look like scams."
+        intro="They look like a friend request, a modeling offer, a giveaway, or someone who already seems to know you. The tell is rarely in what they say — it's in the shape of the account behind it."
+        narrow
+      />
 
       <section className="mt-14">
         <h2 className="font-serif text-xl font-semibold mb-4">
