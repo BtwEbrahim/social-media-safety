@@ -8,6 +8,7 @@ const links = [
   { to: '/footprint', label: 'Digital Footprint' },
   { to: '/security', label: 'Account Security' },
   { to: '/quiz', label: 'Quiz' },
+  { to: '/schedule', label: 'Schedule' },
 ]
 
 const linkClass = ({ isActive }) =>
