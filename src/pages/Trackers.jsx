@@ -1,26 +1,21 @@
 import BeforeAfterSlider from '../components/BeforeAfterSlider'
 import PrivacySignals from '../components/PrivacySignals'
+import PageHeader from '../components/PageHeader'
 
 export default function Trackers() {
   return (
     <div className="max-w-5xl mx-auto px-6 py-16">
-      <p className="font-data text-signal-amber text-xs uppercase tracking-widest mb-4">
-        01 — Trackers & Ads
-      </p>
-      <h1 className="font-serif text-3xl md:text-4xl font-semibold max-w-2xl leading-tight">
-        The ad didn't guess. It was told.
-      </h1>
-      <p className="text-paper-dim text-lg mt-5 max-w-2xl leading-relaxed">
-        Most social platforms are free to use because you're not really the
-        customer — advertisers are, and you're the product being described
-        to them. Every like, pause, and scroll is a data point that gets
-        folded into a profile.
-      </p>
+      <PageHeader
+        number="01"
+        label="Trackers & Ads"
+        icon="trackers"
+        title="The ad didn't guess. It was told."
+        intro="Most social platforms are free to use because you're not really the customer — advertisers are, and you're the product being described to them. Every like, pause, and scroll is a data point that gets folded into a profile."
+        narrow
+      />
 
       <section className="mt-14">
-        <h2 className="font-serif text-xl font-semibold mb-4">
-          See it work
-        </h2>
+        <h2 className="font-serif text-xl font-semibold mb-4">See it work</h2>
         <p className="text-paper-dim text-sm mb-5 max-w-2xl leading-relaxed">
           We tested a real, ad-heavy news site with the blocker off, then
           on. No mockups — this is the same page, one setting changed.
