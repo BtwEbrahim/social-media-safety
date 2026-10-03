@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+@theme {
+  /* Color system: two-state safety language.
+     ink = base surface, paper = base text.
+     signal-amber = "this is exposed / being tracked"
+     signal-teal  = "this is protected / safe" */
+  --color-ink: #0f1420;
+  --color-ink-raised: #161d2e;
+  --color-ink-line: #29334a;
+  --color-paper: #e8e6de;
+  --color-paper-dim: #9aa0b4;
+  --color-signal-amber: #c9a227;
+  --color-signal-amber-dim: #8a7020;
+  --color-signal-teal: #3a7d7c;
+  --color-signal-teal-dim: #295958;
+
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-serif: "Source Serif 4", Georgia, serif;
+}
+
+body {
+  background-color: var(--color-ink);
+  color: var(--color-paper);
+  font-family: var(--font-serif);
+}
+
+.font-data {
+  font-family: var(--font-mono);
+  letter-spacing: -0.01em;
+}
+
+/* Subtle grain — keeps the flat navy from feeling like a plain color
+   fill. Applied once, fixed, behind everything. Cheap: a tiled SVG
+   noise filter, no image asset, no runtime cost. */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Orchestrated load-in: each element fades/rises in sequence via
+   animation-delay set inline per element (see Home.jsx). One motion
+   language reused everywhere, not a library. */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.rise-in {
+  animation: rise-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Scroll-triggered reveal for below-the-fold sections. Toggled via
+   Intersection Observer adding .is-visible. */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise-in,
+  .reveal {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
