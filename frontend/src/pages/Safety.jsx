@@ -28,22 +28,22 @@ export default function Safety() {
       </PageHeader>
 
       <Reveal className="mt-14">
-        <h2 className="font-serif text-xl font-semibold mb-4">
+        <h2 className="text-2xl font-semibold mb-4">
           Real or fake? Click to check your read.
         </h2>
         <FakeAccountCheck />
       </Reveal>
 
       <Reveal className="mt-14">
-        <h2 className="font-serif text-xl font-semibold mb-3">
+        <h2 className="text-2xl font-semibold mb-3">
           Catfishing & impersonation — the actual difference
         </h2>
         <div className="grid md:grid-cols-2 gap-6">
-          <div className="border border-ink-line rounded-lg p-5 bg-ink-raised">
-            <p className="font-data text-xs text-signal-amber uppercase tracking-wider mb-2">
+          <div className="glass rounded-3xl p-6">
+            <p className="text-lg font-semibold text-exposed mb-2">
               Catfishing
             </p>
-            <p className="text-sm text-paper-dim leading-relaxed">
+            <p className="text-paper-dim leading-relaxed">
               Someone invents a persona — often with stolen photos of a
               real, unrelated person — to build a relationship or extract
               money, usually over weeks or months. The "person" doesn't
@@ -51,11 +51,11 @@ export default function Safety() {
               being used.
             </p>
           </div>
-          <div className="border border-ink-line rounded-lg p-5 bg-ink-raised">
-            <p className="font-data text-xs text-signal-amber uppercase tracking-wider mb-2">
+          <div className="glass rounded-3xl p-6">
+            <p className="text-lg font-semibold text-exposed mb-2">
               Impersonation
             </p>
-            <p className="text-sm text-paper-dim leading-relaxed">
+            <p className="text-paper-dim leading-relaxed">
               Someone copies a real, identifiable person's actual name and
               photos to pretend to be them — often to scam that person's
               own friends and followers, who assume the account really is
@@ -66,19 +66,19 @@ export default function Safety() {
       </Reveal>
 
       <Reveal className="mt-14">
-        <h2 className="font-serif text-xl font-semibold mb-4">
+        <h2 className="text-2xl font-semibold mb-4">
           If it happens to you: which report to file
         </h2>
-        <div className="space-y-3">
+        <div className="space-y-3 max-w-3xl">
           {reportPaths.map((r, i) => (
             <div
               key={i}
-              className="border border-ink-line rounded-lg p-4 bg-ink-raised"
+              className="glass rounded-2xl p-4"
             >
-              <p className="font-serif font-semibold text-sm mb-1">
+              <p className="font-semibold mb-1">
                 {r.situation}
               </p>
-              <p className="text-sm text-paper-dim leading-relaxed">
+              <p className="text-paper-dim leading-relaxed">
                 {r.action}
               </p>
             </div>

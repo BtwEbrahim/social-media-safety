@@ -1,17 +1,18 @@
-// Shared page opener: icon + label, headline, intro. Uses the same
-// staggered rise-in as Home so every page enters the same way.
+// Shared page opener: small icon chip, headline, intro. Same entrance as Home.
 export default function PageHeader({ icon: Icon, label, title, children, narrow = false }) {
   return (
     <header>
       <p
-        className="rise-in flex items-center gap-2 font-data text-signal-amber text-xs mb-4"
+        className="rise-in inline-flex items-center gap-2 glass rounded-full pl-2 pr-4 py-1.5 text-sm text-paper-dim mb-6"
         style={{ animationDelay: '0ms' }}
       >
-        <Icon size={18} weight="duotone" />
+        <span className="grid place-items-center w-6 h-6 rounded-full bg-white/10 text-safe">
+          <Icon size={15} weight="bold" />
+        </span>
         {label}
       </p>
       <h1
-        className={`rise-in font-serif text-3xl md:text-4xl font-semibold leading-tight ${narrow ? '' : 'max-w-2xl'}`}
+        className={`rise-in text-4xl md:text-5xl font-semibold leading-[1.08] ${narrow ? '' : 'max-w-3xl'}`}
         style={{ animationDelay: '80ms' }}
       >
         {title}

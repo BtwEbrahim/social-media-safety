@@ -15,7 +15,7 @@ export default function Trackers() {
       </PageHeader>
 
       <Reveal className="mt-14">
-        <h2 className="font-serif text-xl font-semibold mb-4">
+        <h2 className="text-2xl font-semibold mb-4">
           See it work
         </h2>
         <p className="text-paper-dim text-sm mb-5 max-w-2xl leading-relaxed">
@@ -25,41 +25,41 @@ export default function Trackers() {
         <BeforeAfterSlider />
       </Reveal>
 
-      <Reveal className="mt-14 grid md:grid-cols-2 gap-8">
-        <div>
-          <h2 className="font-serif text-xl font-semibold mb-3">
+      <Reveal className="mt-14 grid md:grid-cols-2 gap-4">
+        <div className="glass rounded-3xl p-6 md:p-7">
+          <h2 className="text-2xl font-semibold mb-3">
             What actually gets collected
           </h2>
-          <ul className="space-y-3 text-sm text-paper-dim leading-relaxed">
+          <ul className="space-y-3 text-paper-dim leading-relaxed">
             <li>
-              <span className="text-paper font-data text-xs">COOKIES & IDS —</span>{' '}
+              <span className="text-paper font-semibold">Cookies & IDs.</span>{' '}
               small files that let a tracker recognize you across different
               sites, not just within one.
             </li>
             <li>
-              <span className="text-paper font-data text-xs">FINGERPRINTING —</span>{' '}
+              <span className="text-paper font-semibold">Fingerprinting.</span>{' '}
               your screen size, fonts, and browser quirks combine into a
               near-unique signature — works even without cookies.
             </li>
             <li>
-              <span className="text-paper font-data text-xs">BEHAVIORAL DATA —</span>{' '}
+              <span className="text-paper font-semibold">Behavioral data.</span>{' '}
               what you pause on, how long you watch, what you skip — all
               logged and fed back into recommendation systems.
             </li>
           </ul>
         </div>
-        <div>
-          <h2 className="font-serif text-xl font-semibold mb-3">
+        <div className="glass rounded-3xl p-6 md:p-7">
+          <h2 className="text-2xl font-semibold mb-3">
             What blocking actually does
           </h2>
-          <p className="text-sm text-paper-dim leading-relaxed mb-3">
+          <p className="text-paper-dim leading-relaxed mb-3">
             Independent 2026 testing found Brave's built-in Shields blocks
             roughly 84% of third-party tracking requests by default —
             meaningfully more than Firefox's strict tracking protection
             (~57%) or Safari's (~37%), because most trackers target
             requests directly rather than just cookies.
           </p>
-          <p className="text-sm text-paper-dim leading-relaxed">
+          <p className="text-paper-dim leading-relaxed">
             One catch worth knowing: classic uBlock Origin no longer works
             properly on Chrome as of 2026, since Chrome dropped the
             extension system it depended on. Firefox and Brave both still
@@ -71,7 +71,7 @@ export default function Trackers() {
       </Reveal>
 
       <Reveal className="mt-14">
-        <h2 className="font-serif text-xl font-semibold mb-4">
+        <h2 className="text-2xl font-semibold mb-4">
           Check your own browser
         </h2>
         <PrivacySignals />

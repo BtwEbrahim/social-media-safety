@@ -51,24 +51,24 @@ export default function VisibleTrace() {
   ]
 
   return (
-    <div className="border border-ink-line rounded-lg bg-ink-raised p-5">
+    <div className="glass glass-exposed rounded-[2rem] p-6 md:p-7">
       <div className="flex items-center gap-2 mb-4">
-        <span className="w-1.5 h-1.5 rounded-full bg-signal-amber animate-pulse" />
-        <p className="font-data text-xs text-signal-amber uppercase tracking-wider">
+        <span className="w-2 h-2 rounded-full bg-exposed animate-pulse" />
+        <p className="text-sm font-semibold text-exposed">
           What this page just learned about you
         </p>
       </div>
       <dl className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-3 font-data text-sm">
         {rows.map(([label, value]) => (
           <div key={label}>
-            <dt className="text-paper-dim text-[11px] uppercase tracking-wide mb-0.5">
+            <dt className="text-paper-dim text-xs mb-0.5">
               {label}
             </dt>
             <dd className="text-paper">{value}</dd>
           </div>
         ))}
       </dl>
-      <p className="text-paper-dim text-xs mt-4 font-serif">
+      <p className="text-paper-dim text-sm mt-5 max-w-2xl">
         None of this required a login, a cookie, or your permission. It's
         sitting in your browser, free for any page to read the moment it
         loads — this one included.

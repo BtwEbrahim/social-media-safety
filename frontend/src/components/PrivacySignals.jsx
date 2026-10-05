@@ -45,25 +45,25 @@ export default function PrivacySignals() {
   if (!signals) return null
 
   return (
-    <div className="border border-ink-line rounded-lg bg-ink-raised p-5">
-      <p className="font-data text-xs text-paper-dim uppercase tracking-wider mb-4">
+    <div className="glass rounded-3xl p-5">
+      <p className="text-sm text-paper-dim mb-5">
         Your browser's actual signals, checked live
       </p>
       <div className="space-y-3">
         {signals.map((s) => (
           <div key={s.label} className="flex items-start gap-3">
             <span
-              className={`mt-1 w-2 h-2 rounded-full shrink-0 ${
+              className={`mt-2 w-2 h-2 rounded-full shrink-0 ${
                 s.active === true
-                  ? 'bg-signal-teal'
+                  ? 'bg-safe'
                   : s.active === false
-                  ? 'bg-signal-amber'
+                  ? 'bg-exposed'
                   : 'bg-paper-dim'
               }`}
             />
             <div>
-              <p className="font-data text-sm text-paper">{s.label}</p>
-              <p className="text-paper-dim text-xs mt-0.5">{s.note}</p>
+              <p className="font-medium text-paper">{s.label}</p>
+              <p className="text-paper-dim text-sm mt-0.5">{s.note}</p>
             </div>
           </div>
         ))}

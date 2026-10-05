@@ -2,19 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 
 export default function BeforeAfterSlider() {
   const [position, setPosition] = useState(50)
-  const [containerWidth, setContainerWidth] = useState(0)
   const containerRef = useRef(null)
   const dragging = useRef(false)
-
-  useEffect(() => {
-    const el = containerRef.current
-    if (!el) return
-    const observer = new ResizeObserver((entries) => {
-      setContainerWidth(entries[0].contentRect.width)
-    })
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [])
 
   const updateFromClientX = (clientX) => {
     const rect = containerRef.current.getBoundingClientRect()
@@ -24,15 +13,27 @@ export default function BeforeAfterSlider() {
 
   const handlePointerDown = (e) => {
     dragging.current = true
+    e.currentTarget.setPointerCapture?.(e.pointerId)
     updateFromClientX(e.clientX)
   }
+
   const handlePointerMove = (e) => {
     if (!dragging.current) return
     updateFromClientX(e.clientX)
   }
+
   const handlePointerUp = () => {
     dragging.current = false
   }
+
+  useEffect(() => {
+    const handlePointerUpOutside = () => {
+      dragging.current = false
+    }
+
+    window.addEventListener('pointerup', handlePointerUpOutside)
+    return () => window.removeEventListener('pointerup', handlePointerUpOutside)
+  }, [])
 
   return (
     <div>
@@ -41,10 +42,10 @@ export default function BeforeAfterSlider() {
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
-        onPointerLeave={handlePointerUp}
-        className="relative w-full aspect-video rounded-lg overflow-hidden border border-ink-line select-none cursor-ew-resize touch-none"
+        onPointerCancel={handlePointerUp}
+        className="relative w-full aspect-video rounded-[2rem] overflow-hidden border border-white/15 shadow-2xl shadow-black/40 select-none cursor-ew-resize touch-none"
       >
-        {/* After image — full width, sits underneath */}
+        {/* Both images are fixed in exactly the same position. */}
         <img
           src={`${import.meta.env.BASE_URL}screenshots/after.png`}
           alt="Website with ad-blocker on — clean, trackers blocked"
@@ -52,42 +53,41 @@ export default function BeforeAfterSlider() {
           draggable={false}
         />
 
-        {/* Before image — clipped to slider position, sits on top */}
+        {/* Only the visible area of the BEFORE image changes. The image itself never moves. */}
         <div
           className="absolute inset-0 overflow-hidden pointer-events-none"
-          style={{ width: `${position}%` }}
+          style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}
         >
           <img
             src={`${import.meta.env.BASE_URL}screenshots/before.png`}
             alt="Website with no ad-blocker — full of ads and trackers"
-            className="h-full object-cover"
-            style={{ width: containerWidth || '100%' }}
+            className="absolute inset-0 w-full h-full object-cover"
             draggable={false}
           />
         </div>
 
-        {/* Divider handle */}
+        {/* Slider stays on top; it controls the clipping boundary. */}
         <div
-          className="absolute inset-y-0 w-0.5 bg-paper pointer-events-none"
+          className="absolute inset-y-0 w-0.5 bg-white/90 pointer-events-none"
           style={{ left: `${position}%` }}
         >
-          <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-9 h-9 rounded-full bg-paper flex items-center justify-center shadow-lg">
+          <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-11 h-11 rounded-full bg-white/20 border border-white/60 backdrop-blur-md flex items-center justify-center shadow-lg">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-              <path d="M8 6L2 12L8 18" stroke="#0F1420" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M16 6L22 12L16 18" stroke="#0F1420" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M8 6L2 12L8 18" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M16 6L22 12L16 18" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
         </div>
 
         {/* Labels */}
-        <div className="absolute top-3 left-3 font-data text-[11px] px-2 py-1 rounded bg-ink/80 text-signal-amber uppercase tracking-wider pointer-events-none">
+        <div className="absolute top-3 left-3 text-xs font-semibold px-3 py-1.5 rounded-full glass text-exposed pointer-events-none">
           No blocker
         </div>
-        <div className="absolute top-3 right-3 font-data text-[11px] px-2 py-1 rounded bg-ink/80 text-signal-teal uppercase tracking-wider pointer-events-none">
+        <div className="absolute top-3 right-3 text-xs font-semibold px-3 py-1.5 rounded-full glass text-safe pointer-events-none">
           uBO on
         </div>
       </div>
-      <p className="text-paper-dim text-xs mt-3 leading-relaxed">
+      <p className="text-paper-dim text-sm mt-3 leading-relaxed">
         Drag the slider. Same page, same visit — only the blocker setting
         changed between the two screenshots.
       </p>
